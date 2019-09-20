@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                                             android:background="@color/login_background"
+                                             android:layout_height="match_parent">
+
+    <TextView
+            android:text="SuperWiser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/header"
+            android:textSize="36dp"
+            android:id="@+id/name_superwiser"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout2" app:layout_constraintVertical_bias="0.595"/>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/bg_rail_mobile" android:id="@+id/imageView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
+            app:layout_constraintStart_toStartOf="parent"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="270dp"
+            android:layout_height="478dp"
+            android:gravity="center"
+            android:background="@drawable/login_container"
+            android:backgroundTint="@color/login_container"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" android:id="@+id/linearLayout2"
+            app:layout_constraintHorizontal_bias="0.492">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_nametag"
+                android:id="@+id/image_nametag"/>
+        <TextView
+                android:text="Sign Up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/signup"
+                android:textColor="@color/header"
+                android:textSize="24sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                android:textStyle="bold"/>
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/ID"
+                android:hint="Worker ID"
+                android:layout_marginBottom="10dp"
+                android:drawableLeft="@drawable/profile"
+        />
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:ems="10"
+                android:id="@+id/email"
+                android:hint="Email"
+                android:layout_marginBottom="10dp"
+                android:drawableLeft="@drawable/email"
+        />
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/passwordEditText"
+                android:hint="Password"
+                android:layout_marginBottom="10dp"
+                android:drawableLeft="@drawable/password"/>
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/confirm_password"
+                android:hint="Confirm Password"
+                android:layout_marginBottom="10dp"
+                android:drawableLeft="@drawable/password"/>
+        <Spinner
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:id="@+id/spinner"
+        />
+        <Button
+                android:text="Sign Up"
+                android:layout_width="200dp"
+                android:layout_height="28dp"
+                android:textColor="@color/login_container"
+                android:background="@color/sidebar"
+                android:id="@+id/sign_up_button"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_admin_manage_user"
+        android:icon="@drawable/ic_user"
+        android:title="Manage User" />
+
+    <item
+            android:id="@+id/nav_admin_group"
+            android:icon="@drawable/group_icon"
+            android:title="Group" />
+
+    <item
+            android:id="@+id/nav_admin_remotecontrol"
+            android:icon="@drawable/remote_icon"
+            android:title="Remote Control" />
+
+    <item
+            android:id="@+id/nav_admin_playgroup"
+            android:icon="@drawable/playgroup_icon"
+            android:title="Playgroup" />
+
+    <item
+            android:id="@+id/nav_admin_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Log Out" />
+</menu>
