@@ -19,21 +19,17 @@ class Admin_ManageGroupMainFragment : Fragment() {
     val auth = FirebaseAuth.getInstance()
     lateinit var adapter: Admin_ManageGroupMainFragmentAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var query = db.collection("Group").whereEqualTo("admin", "${auth.currentUser!!.uid}")
         var options = FirestoreRecyclerOptions.Builder<Object_Group>()
             .setQuery(query, Object_Group::class.java)
             .build()
         var myView = inflater.inflate(R.layout.admin_list_addbutton_fragment, container, false)
         myView.findViewById<TextView>(R.id.fragmentTitle).text = "Group"
-        var registerRecycler = myView.findViewById<RecyclerView>(R.id.fragmentRecycler)
+        var recycler = myView.findViewById<RecyclerView>(R.id.fragmentRecycler)
         adapter = Admin_ManageGroupMainFragmentAdapter(options)
-        registerRecycler.layoutManager = LinearLayoutManager(context)
-        registerRecycler.adapter = adapter
+        recycler.layoutManager = LinearLayoutManager(context)
+        recycler.adapter = adapter
         var button = myView.findViewById<Button>(R.id.addNewButton)
         button.text = "Add Group"
         button.setOnClickListener {

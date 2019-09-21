@@ -25,6 +25,7 @@
         <activity android:name=".General_Webview"
         android:screenOrientation="landscape">
         </activity>
+        <activity android:name=".Admin_ManageGroupDetailsPage"></activity>
         <activity android:name=".Admin_ManageUserDetailsPage"></activity>
     </application>
 

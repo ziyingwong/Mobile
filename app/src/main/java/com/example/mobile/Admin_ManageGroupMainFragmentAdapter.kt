@@ -18,15 +18,12 @@ class Admin_ManageGroupMainFragmentAdapter(options: FirestoreRecyclerOptions<Obj
 
     override fun onBindViewHolder(holder:ViewHolder, position: Int, model: Object_Group) {
         holder.id.text =model.name
-//        holder.itemView.setOnClickListener{ view ->
-//            val intent = Intent(view.context,Admin_ManageUserDetailsPage::class.java)
-//            DataContainer_Group.id = model.id
-//            DataContainer_Group.name = model.name
-//            DataContainer_Group.scene = model.scene
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-//            view.context.startActivity(intent)
-//
-//        }
+        holder.itemView.setOnClickListener{ view ->
+            val intent = Intent(view.context,Admin_ManageGroupDetailsPage::class.java)
+            DataContainer_Group.id = model.id
+            DataContainer_Group.name = model.name
+            view.context.startActivity(intent)
+        }
     }
 
     class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
