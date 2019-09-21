@@ -14,7 +14,9 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.beust.klaxon.Klaxon
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -25,6 +27,7 @@ class Admin_Main : AppCompatActivity() {
     var auth = FirebaseAuth.getInstance()
     lateinit var selectedFragment: Fragment
     var selectedID: Int = R.id.nav_admin_manage_user
+    var haveNewSceneGroup = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,25 +40,37 @@ class Admin_Main : AppCompatActivity() {
         val url = "http://10.0.2.2:3000/graphql"
         val jsonObjectRequest = object : JsonObjectRequest(
             Request.Method.POST, url, null, Response.Listener { response ->
+
+                //get all scene stored in things factory and convert to volley response object
                 Log.e("myTag", "${response}")
                 val myresponse = Klaxon().parse<Object_VolleyResponse>(response.toString())
-                Log.e("myTag", myresponse?.data?.boards?.total.toString())
+                Log.e("myTag", "things factory total : ${myresponse?.data?.boards?.total}")
 
-                var scenefs = ArrayList<String>()
+                //get all scene stored in firebase
+                var sceneIdfs = ArrayList<String>()
+                var sceneGroup = ArrayList<String>()
                 db.collection("scene").whereEqualTo("admin", auth.currentUser!!.uid).get()
                     .addOnSuccessListener { docs ->
                         for (doc in docs) {
-                            scenefs.add(doc.get("id").toString())
+
+                            //put scene id to arraylist
+                            sceneGroup.add(doc.get("group").toString())
+                            sceneIdfs.add(doc.get("id").toString())
                         }
 
+                        //item = scene array ,  itemArr = scene id array
                         var item = myresponse!!.data!!.boards.items
                         var itemArr = ArrayList<String>()
-                        runBlocking {
-                            Log.e("myTag", "check if scene in tf saved in fs")
+                        Log.e("myTag", "firestore :${sceneIdfs.size}")
+                        Log.e("myTag", "things factory : ${item.size}")
 
-                            Log.e("myTag", "firestore : ${scenefs}")
+                        runBlocking {
+
+                            //check if all scene in thingsfactory is stored in firestore
                             for (k in item.indices) {
-                                if (item.get(k).id !in scenefs) {
+
+                                //id from things factory not found in firestore, add to scene to firestore
+                                if (item.get(k).id !in sceneIdfs) {
                                     launch {
                                         addScene(item.get(k).id, item.get(k).name)
                                     }
@@ -63,7 +78,7 @@ class Admin_Main : AppCompatActivity() {
                                     launch {
                                         Log.e(
                                             "myTag",
-                                            "${k + 1} scene ${item.get(k)} exist in firestore"
+                                            "${k + 1} scene ${item.get(k).id} exist in firestore"
                                         )
                                     }
                                 }
@@ -73,18 +88,23 @@ class Admin_Main : AppCompatActivity() {
                         }
 
                         runBlocking {
-                            Log.e("myTag", "check if scene in fs does not exist in tf")
-                            Log.e("myTag", "things factory : ${itemArr}")
-                            for (i in scenefs.indices) {
-                                if (scenefs.get(i) !in itemArr) {
+
+                            //check if all scene in firestore is stored in thingsboard
+                            for (i in sceneIdfs.indices) {
+
+                                //id from firestore not found in thingsfactory, delete scene in firestore
+                                if (sceneIdfs.get(i) !in itemArr) {
                                     launch {
-                                        removeScene(scenefs.get(i))
+                                        removeSceneFromGroup(sceneIdfs.get(i), sceneGroup.get(i))
+                                    }
+                                    launch {
+                                        removeScene(sceneIdfs.get(i))
                                     }
                                 } else {
                                     launch {
                                         Log.e(
                                             "myTag",
-                                            "${i + 1} scene ${scenefs.get(i)} exist in things factory"
+                                            "${i + 1} scene ${sceneIdfs.get(i)} exist in things factory"
                                         )
                                     }
                                 }
@@ -183,7 +203,7 @@ class Admin_Main : AppCompatActivity() {
             .commit()
         true
     }
-//    }
+
 
     fun packageInstalled(): Boolean {
         try {
@@ -201,17 +221,30 @@ class Admin_Main : AppCompatActivity() {
 
     suspend fun addScene(id: String, name: String) {
         Log.e("myTag", "Adding scene : ${id}")
+        var group = auth.currentUser!!.uid + "newscene"
         var data = hashMapOf(
             "name" to name,
             "id" to id,
             "admin" to auth.currentUser!!.uid,
-            "group" to String()
+            "group" to group
         )
         db.collection("scene").document(id).set(data).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Log.e("myTag", "Added scene :${id}")
             } else {
                 Log.e("myTag", "Fail to add scene : ${id}")
+            }
+        }
+        runBlocking {
+            if (!haveNewSceneGroup) {
+                launch {
+                    haveNewSceneGroup = createNewSceneGroup(id, group)
+                }
+
+            } else {
+                launch {
+                    addSceneToGroup(id, group)
+                }
             }
         }
     }
@@ -221,5 +254,46 @@ class Admin_Main : AppCompatActivity() {
             Log.e("myTag", "deleted scene ${id}")
         }
     }
+
+    suspend fun createNewSceneGroup(sceneId: String, groupId: String): Boolean {
+        var data = hashMapOf(
+            "id" to groupId,
+            "admin" to auth.currentUser!!.uid,
+            "name" to "New Scene"
+        )
+        Log.e("myTag", "created new group")
+
+        db.collection("Group").document(groupId).set(data, SetOptions.merge())
+            .addOnSuccessListener {
+                runBlocking {
+                    launch {
+                        addSceneToGroup(sceneId, groupId)
+                    }
+                }
+            }
+        return true
+    }
+
+    suspend fun addSceneToGroup(sceneId: String, groupId: String) {
+        db.collection("Group").document(groupId).update("scene", FieldValue.arrayUnion(sceneId))
+            .addOnSuccessListener {
+                Log.e("myTag", "Added scene ${sceneId} to new scene group")
+            }
+    }
+
+
+    suspend fun removeSceneFromGroup(sceneId: String, groupId: String) {
+        db.collection("Group").document(groupId).update("scene", FieldValue.arrayRemove(sceneId))
+            .addOnSuccessListener {
+                Log.e(
+                    "myTag",
+                    "Removed scene ${sceneId} from group ${groupId}"
+                )
+            }
+            .addOnFailureListener { e ->
+                Log.e("myTag", e.toString())
+            }
+    }
+
 
 }
