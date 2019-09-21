@@ -4,15 +4,25 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.beust.klaxon.Klaxon
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class Admin_Main : AppCompatActivity() {
 
     lateinit var bottomNav: BottomNavigationView
+    var db = FirebaseFirestore.getInstance()
+    var auth = FirebaseAuth.getInstance()
     lateinit var selectedFragment: Fragment
     var selectedID: Int = R.id.nav_admin_manage_user
 
@@ -23,6 +33,90 @@ class Admin_Main : AppCompatActivity() {
         bottomNav = findViewById(R.id.admin_bottom_navigation)
         bottomNav.setOnNavigationItemSelectedListener(navListner)
         bottomNav.selectedItemId = R.id.nav_admin_manage_user
+
+        val url = "http://10.0.2.2:3000/graphql"
+        val jsonObjectRequest = object : JsonObjectRequest(
+            Request.Method.POST, url, null, Response.Listener { response ->
+                Log.e("myTag", "${response}")
+                val myresponse = Klaxon().parse<Object_VolleyResponse>(response.toString())
+                Log.e("myTag", myresponse?.data?.boards?.total.toString())
+
+                var scenefs = ArrayList<String>()
+                db.collection("scene").whereEqualTo("admin", auth.currentUser!!.uid).get()
+                    .addOnSuccessListener { docs ->
+                        for (doc in docs) {
+                            scenefs.add(doc.get("id").toString())
+                        }
+
+                        var item = myresponse!!.data!!.boards.items
+                        var itemArr = ArrayList<String>()
+                        runBlocking {
+                            Log.e("myTag", "check if scene in tf saved in fs")
+
+                            Log.e("myTag", "firestore : ${scenefs}")
+                            for (k in item.indices) {
+                                if (item.get(k).id !in scenefs) {
+                                    launch {
+                                        addScene(item.get(k).id, item.get(k).name)
+                                    }
+                                } else {
+                                    launch {
+                                        Log.e(
+                                            "myTag",
+                                            "${k + 1} scene ${item.get(k)} exist in firestore"
+                                        )
+                                    }
+                                }
+                                itemArr.add(item.get(k).id)
+                            }
+
+                        }
+
+                        runBlocking {
+                            Log.e("myTag", "check if scene in fs does not exist in tf")
+                            Log.e("myTag", "things factory : ${itemArr}")
+                            for (i in scenefs.indices) {
+                                if (scenefs.get(i) !in itemArr) {
+                                    launch {
+                                        removeScene(scenefs.get(i))
+                                    }
+                                } else {
+                                    launch {
+                                        Log.e(
+                                            "myTag",
+                                            "${i + 1} scene ${scenefs.get(i)} exist in things factory"
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+            },
+            Response.ErrorListener { error ->
+                Log.e("myTag", "Error : ${error}")
+            }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val sharedPref = getSharedPreferences("pref", 0)
+                var token = sharedPref.getString("token", "")
+                var header = HashMap<String, String>()
+                header["Cookie"] = "access_token=${token}"
+                header["Origin"] = "http://10.0.2.2:3000"
+                header["Referer"] = "http://10.0.2.2:3000/board-list"
+                return header
+            }
+
+            override fun getBody(): ByteArray {
+                var string: String =
+                    "{\"query\":\"{\\n  boards(sortings: [{name: \\\"createdAt\\\", desc: true}]) {\\n    items {\\n      id\\n      name\\n        }\\n    total\\n    }\\n}\\n\"}"
+                var body: ByteArray = string.toByteArray()
+                return body
+            }
+
+
+        }
+        Singleton_Volley.getInstance(this).addToRequestQueue(jsonObjectRequest)
+
     }
 
     private val navListner = BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
@@ -104,4 +198,28 @@ class Admin_Main : AppCompatActivity() {
         super.onBackPressed()
         finishAffinity()
     }
+
+    suspend fun addScene(id: String, name: String) {
+        Log.e("myTag", "Adding scene : ${id}")
+        var data = hashMapOf(
+            "name" to name,
+            "id" to id,
+            "admin" to auth.currentUser!!.uid,
+            "group" to String()
+        )
+        db.collection("scene").document(id).set(data).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Log.e("myTag", "Added scene :${id}")
+            } else {
+                Log.e("myTag", "Fail to add scene : ${id}")
+            }
+        }
+    }
+
+    suspend fun removeScene(id: String) {
+        db.collection("scene").document(id).delete().addOnSuccessListener {
+            Log.e("myTag", "deleted scene ${id}")
+        }
+    }
+
 }
