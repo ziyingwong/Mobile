@@ -74,9 +74,12 @@ class General_Login : AppCompatActivity() {
                                 .addOnSuccessListener { document ->
 
                                     //API call to login to ThingsFactory
-                                    val url = "http://localhost:300/login"
+                                    val url = "http://10.0.2.2:300/login/"
                                     val jsonObjectRequest = JsonObjectRequest(
-                                        Request.Method.GET, url, null, Response.Listener { response ->
+                                        Request.Method.GET,
+                                        url,
+                                        null,
+                                        Response.Listener { response ->
                                             var token = response.getString("access_token")
                                             Log.e("myTag", "token ${token}")
                                             val sharedPref =
@@ -85,7 +88,7 @@ class General_Login : AppCompatActivity() {
                                             editor.putString("token", token)
                                             editor.apply()
                                             cookiemanager.setCookie(
-                                                "http://192.168.0.141:3000",
+                                                "http://10.0.2.2:3000",
                                                 "access_token=${token}"
                                             )
 
@@ -151,7 +154,11 @@ class General_Login : AppCompatActivity() {
                 builder.setPositiveButton("Send") { dialog, which ->
                     var email = editText.text.toString()
                     if (email.isNullOrBlank()) {
-                        Toast.makeText(this@General_Login, "Email cannot be empty", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            this@General_Login,
+                            "Email cannot be empty",
+                            Toast.LENGTH_LONG
+                        ).show()
                     } else {
                         email = email.replace("\\s".toRegex(), "")
                         auth.sendPasswordResetEmail(email)
@@ -207,7 +214,12 @@ class General_Login : AppCompatActivity() {
                 ds.isUnderlineText = true
             }
         }
-        forgetPwSS.setSpan(forgetPwClickableSpan, 0, forgetPwSS.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        forgetPwSS.setSpan(
+            forgetPwClickableSpan,
+            0,
+            forgetPwSS.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         forgetPasswordText.text = forgetPwSS
         forgetPasswordText.movementMethod = LinkMovementMethod.getInstance()
 
@@ -251,25 +263,32 @@ class General_Login : AppCompatActivity() {
             val sharedPref =
                 this.getSharedPreferences("pref", 0)
             var token = sharedPref.getString("token", "")
-            cookiemanager.setCookie(
-                "http://192.168.0.141:3000",
-                "access_token=${token}"
-            )
-            db.collection("user").document(UID).get()
-                .addOnSuccessListener { document ->
-                    if (document.get("adminAccess") == true) {
-                        Log.e("myTag", "Access : Admin")
-                        val intent = Intent(this, Admin_Main::class.java)
-                        startActivity(intent)
-                    } else {
-                        Log.e("myTag", "Access : User")
-                        val intent = Intent(this, User_Main::class.java)
-                        startActivity(intent)
+            if (token.isNullOrBlank()) {
+                auth.signOut()
+                finishAffinity()
+                startActivity(Intent(this, General_Login::class.java))
+            } else {
+                cookiemanager.setCookie(
+                    "http://10.0.2.2:3000",
+                    "access_token=${token}"
+                )
+                Log.e("myTag", "token : ${token}")
+                db.collection("user").document(UID).get()
+                    .addOnSuccessListener { document ->
+                        if (document.get("adminAccess") == true) {
+                            Log.e("myTag", "Access : Admin")
+                            val intent = Intent(this, Admin_Main::class.java)
+                            startActivity(intent)
+                        } else {
+                            Log.e("myTag", "Access : User")
+                            val intent = Intent(this, User_Main::class.java)
+                            startActivity(intent)
+                        }
                     }
-                }
-                .addOnFailureListener { e ->
-                    Log.e("myTag", "Failure : ${e}")
-                }
+                    .addOnFailureListener { e ->
+                        Log.e("myTag", "Failure : ${e}")
+                    }
+            }
         }
     }
 
