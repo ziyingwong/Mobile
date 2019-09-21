@@ -28,6 +28,7 @@ class General_Login : AppCompatActivity() {
     var auth = FirebaseAuth.getInstance()
     var db = FirebaseFirestore.getInstance()
     var cookiemanager = CookieManager.getInstance()
+    var ipAdd = "10.0.2.2"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +75,7 @@ class General_Login : AppCompatActivity() {
                                 .addOnSuccessListener { document ->
 
                                     //API call to login to ThingsFactory
-                                    val url = "http://10.0.2.2:300/login/"
+                                    val url = "http://${ipAdd}:300/login/"
                                     val jsonObjectRequest = JsonObjectRequest(
                                         Request.Method.GET,
                                         url,
@@ -88,7 +89,7 @@ class General_Login : AppCompatActivity() {
                                             editor.putString("token", token)
                                             editor.apply()
                                             cookiemanager.setCookie(
-                                                "http://10.0.2.2:3000",
+                                                "http://${ipAdd}:3000",
                                                 "access_token=${token}"
                                             )
 
@@ -269,7 +270,7 @@ class General_Login : AppCompatActivity() {
                 startActivity(Intent(this, General_Login::class.java))
             } else {
                 cookiemanager.setCookie(
-                    "http://10.0.2.2:3000",
+                    "http://${ipAdd}:3000",
                     "access_token=${token}"
                 )
                 Log.e("myTag", "token : ${token}")

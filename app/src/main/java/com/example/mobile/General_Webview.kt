@@ -18,13 +18,13 @@ import org.json.JSONStringer
 
 class General_Webview : AppCompatActivity() {
 
-
+    var ipAdd = "10.0.2.2"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.webview)
         var webView = findViewById<WebView>(R.id.webView)
         webView.settings.javaScriptEnabled = true
-        webView.loadUrl("http://10.0.2.2:3000/board-viewer/07f0507e-b531-4393-a023-8938088a4182")
+        webView.loadUrl("http://${ipAdd}:3000/board-viewer/${DataContainer_Scene.id}")
 
     }
 }
