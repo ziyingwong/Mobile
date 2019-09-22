@@ -17,9 +17,11 @@ class Admin_ManageGroupDetailsPage:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_list_addbutton_fragment)
-        findViewById<TextView>(R.id.fragmentTitle).text = DataContainer_Group.name
+        var name = intent.getStringExtra("name")
+        var id = intent.getStringExtra("id")
+        findViewById<TextView>(R.id.fragmentTitle).text = name
 
-        var query = db.collection("scene").whereEqualTo("group",DataContainer_Group.id)
+        var query = db.collection("scene").whereEqualTo("group",id)
         var options = FirestoreRecyclerOptions.Builder<Object_Scene>()
             .setQuery(query,Object_Scene::class.java)
             .build()

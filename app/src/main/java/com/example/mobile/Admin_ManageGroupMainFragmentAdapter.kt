@@ -20,8 +20,8 @@ class Admin_ManageGroupMainFragmentAdapter(options: FirestoreRecyclerOptions<Obj
         holder.id.text =model.name
         holder.itemView.setOnClickListener{ view ->
             val intent = Intent(view.context,Admin_ManageGroupDetailsPage::class.java)
-            DataContainer_Group.id = model.id
-            DataContainer_Group.name = model.name
+            intent.putExtra("id",model.id)
+            intent.putExtra("name",model.name)
             view.context.startActivity(intent)
         }
     }
