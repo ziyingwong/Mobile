@@ -5,5 +5,6 @@ class Object_Scene {
     lateinit var group:String
     lateinit var id:String
     lateinit var name :String
+    lateinit var playgroup:ArrayList<String>
 
 }
