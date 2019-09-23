@@ -27,7 +27,7 @@ class Admin_Main : AppCompatActivity() {
     var db = FirebaseFirestore.getInstance()
     var auth = FirebaseAuth.getInstance()
     lateinit var selectedFragment: Fragment
-    var selectedID: Int = R.id.nav_user_group_list
+    var selectedID: Int = R.id.nav_admin_manage_user
     var haveNewSceneGroup = false
 
 
@@ -36,8 +36,8 @@ class Admin_Main : AppCompatActivity() {
         setContentView(R.layout.admin_main)
         bottomNav = findViewById(R.id.admin_bottom_navigation)
         bottomNav.setOnNavigationItemSelectedListener(navListner)
-        bottomNav.selectedItemId = R.id.nav_admin_manage_user
         selectedID = intent.getIntExtra("selectedFragment", R.id.nav_admin_manage_user)
+        bottomNav.selectedItemId = selectedID
 
         val url = "http://10.0.2.2:3000/graphql"
         val jsonObjectRequest = object : JsonObjectRequest(
