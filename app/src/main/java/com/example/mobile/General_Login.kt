@@ -28,7 +28,7 @@ class General_Login : AppCompatActivity() {
     var auth = FirebaseAuth.getInstance()
     var db = FirebaseFirestore.getInstance()
     var cookiemanager = CookieManager.getInstance()
-    var ipAdd = "10.0.2.2"
+    var ipAdd = R.string.ipArr
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
