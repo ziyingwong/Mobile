@@ -67,7 +67,8 @@ class Admin_ManagePlayGroupMainFragment : Fragment() {
                         "admin" to "${auth.currentUser!!.uid}",
                         "scene" to array,
                         "name" to name,
-                        "id" to id
+                        "id" to id,
+                        "user" to array
                     )
                     db.collection("PlayGroup").document(id).set(info)
                         .addOnFailureListener { it ->

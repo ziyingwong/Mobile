@@ -5,5 +5,6 @@ class Object_Playgroup {
     lateinit var name: String
     lateinit var id:String
     lateinit var scene : List<String>
+    lateinit var user : List<String>
 
 }
