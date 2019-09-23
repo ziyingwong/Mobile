@@ -21,16 +21,25 @@ class User_Main : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_main)
+        selectedID = intent.getIntExtra("selectedFragment",R.id.nav_user_group_list)
         bottomNav = findViewById(R.id.user_bottom_navigation)
         bottomNav.setOnNavigationItemSelectedListener(navListner)
+        bottomNav.selectedItemId = selectedID
+
     }
 
 
     private val navListner = BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
 
-        //logout
-
         when (menuItem.itemId) {
+            R.id.nav_user_playgroup_list->{
+                selectedFragment = User_PlayGroupMainFragment()
+                selectedID = R.id.nav_user_playgroup_list
+            }
+            R.id.nav_user_group_list->{
+                selectedFragment = User_GroupMainFragment()
+                selectedID = R.id.nav_user_group_list
+            }
             R.id.nav_user_remote -> {
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Open remote control")
