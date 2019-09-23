@@ -33,6 +33,8 @@
         <activity
                 android:name=".General_PlayScenes"
                 android:screenOrientation="landscape"></activity>
+        <activity android:name=".User_PlayGroupDetailsPage"></activity>
+        <activity android:name=".User_GroupDetailsPage"></activity>
     </application>
 
 </manifest>
