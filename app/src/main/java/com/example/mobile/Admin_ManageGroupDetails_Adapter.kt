@@ -19,9 +19,9 @@ class Admin_ManageGroupDetails_Adapter(options: FirestoreRecyclerOptions<Object_
     override fun onBindViewHolder(holder: ViewHolder, position: Int, model: Object_Scene) {
         holder.id.text = model.name
         holder.itemView.setOnClickListener { view ->
-            val intent = Intent(view.context, General_Webview::class.java)
+            val intent = Intent(view.context, General_ViewScene::class.java)
             intent.putExtra("id",model.id)
-            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
             view.context.startActivity(intent)
         }
     }

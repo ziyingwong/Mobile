@@ -22,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class Admin_ManagePlayGroupMainFragment : Fragment() {
     val db = FirebaseFirestore.getInstance()
     val auth = FirebaseAuth.getInstance()
-    lateinit var adapter: Admin_ManageGroupMainFragmentAdapter
+    lateinit var adapter: Admin_ManagePlayGroupMainFragmentAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,13 +30,13 @@ class Admin_ManagePlayGroupMainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         var query = db.collection("PlayGroup").whereEqualTo("admin", "${auth.currentUser!!.uid}")
-        var options = FirestoreRecyclerOptions.Builder<Object_Group>()
-            .setQuery(query, Object_Group::class.java)
+        var options = FirestoreRecyclerOptions.Builder<Object_Playgroup>()
+            .setQuery(query, Object_Playgroup::class.java)
             .build()
         var myView = inflater.inflate(R.layout.admin_list_addbutton_fragment, container, false)
         myView.findViewById<TextView>(R.id.fragmentTitle).text = "Playgroup"
         var registerRecycler = myView.findViewById<RecyclerView>(R.id.fragmentRecycler)
-        adapter = Admin_ManageGroupMainFragmentAdapter(options)
+        adapter = Admin_ManagePlayGroupMainFragmentAdapter(options)
         registerRecycler.layoutManager = LinearLayoutManager(context)
         registerRecycler.adapter = adapter
         var button = myView.findViewById<Button>(R.id.addNewButton)

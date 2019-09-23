@@ -5,13 +5,13 @@ import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import android.webkit.WebViewClient
 
-class General_Webview : AppCompatActivity() {
+class General_ViewScene : AppCompatActivity() {
 
     var ipAdd = "10.0.2.2"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.webview)
+        setContentView(R.layout.general_webview)
         var webView = findViewById<WebView>(R.id.webView)
         webView.settings.javaScriptEnabled = true
         var id = intent.getStringExtra("id")
