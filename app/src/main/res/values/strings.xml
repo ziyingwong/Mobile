@@ -5,4 +5,5 @@
         <item>Company X</item>
         <item>Company Z</item>
     </string-array>
+    <string name="ipArr">10.0.2.2</string>
 </resources>
