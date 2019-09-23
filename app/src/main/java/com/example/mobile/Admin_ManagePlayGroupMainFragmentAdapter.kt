@@ -19,12 +19,9 @@ class Admin_ManagePlayGroupMainFragmentAdapter(options: FirestoreRecyclerOptions
     override fun onBindViewHolder(holder:ViewHolder, position: Int, model: Object_Playgroup) {
         holder.id.text =model.name
         holder.itemView.setOnClickListener{ view ->
-            val intent = Intent(view.context,General_PlayScenes::class.java)
-//            val intent = Intent(view.context,Admin_ManagePlayGroupDetailsPage::class.java)
-//            intent.putExtra("id",model.id)
-//            intent.putExtra("name",model.name)
-            intent.putExtra("selected",position)
-            intent.putExtra("list",model.scene as ArrayList<String>)
+            val intent = Intent(view.context,Admin_ManagePlayGroupDetailsPage::class.java)
+            intent.putExtra("id",model.id)
+            intent.putExtra("name",model.name)
             view.context.startActivity(intent)
         }
     }
