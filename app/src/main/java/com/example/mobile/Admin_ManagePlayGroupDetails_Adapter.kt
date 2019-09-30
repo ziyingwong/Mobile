@@ -31,19 +31,22 @@ class Admin_ManagePlayGroupDetails_Adapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int, model: Object_Scene) {
         holder.id.text = model.name
         holder.itemView.setOnClickListener { view ->
+            var scenes = ArrayList<String>()
+            db.collection("scene").whereArrayContains("playgroup", id).get()
+                .addOnSuccessListener { doc ->
+                    for (i in doc.documents.indices) {
+                        var scene = doc.documents.get(i).get("id")
+                        scenes.add(scene.toString())
 
-            db.collection("PlayGroup").document(id).get().addOnSuccessListener { doc ->
-                if (doc.exists()) {
+                    }
                     val intent = Intent(view.context, General_PlayScenes::class.java)
-                    var scenes = doc.get("scene") as ArrayList<String>
                     intent.putExtra("selected", position)
                     intent.putExtra("list", scenes)
-                    Log.e("myTag","${id} : ${scenes}")
+                    Log.e("myTag", "${id} : ${scenes}")
                     intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
                     view.context.startActivity(intent)
 
                 }
-            }
 
         }
     }
