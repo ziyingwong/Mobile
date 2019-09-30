@@ -24,8 +24,10 @@ class Admin_ManageUserDetailsPage:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_manage_user_details)
-        val user = DataContainer_User.id
-        val uid = DataContainer_User.uid
+        var user = intent.getStringExtra("id")
+        var uid = intent.getStringExtra("uid")
+        var grouplist = intent.getStringArrayListExtra("grouplist")
+        var playgrouplist = intent.getStringArrayListExtra("playgrouplist")
         val idtext = findViewById<TextView>(R.id.idText)
         idtext.text = user
 
@@ -51,6 +53,7 @@ class Admin_ManageUserDetailsPage:AppCompatActivity() {
         playgroupRecycler.layoutManager = layoutManager2
         playgroupRecycler.adapter = adapterPlaygroup
 
+
         //update group
         val groupButton = findViewById<Button>(R.id.groupButton)
         groupButton.setOnClickListener {
@@ -62,7 +65,7 @@ class Admin_ManageUserDetailsPage:AppCompatActivity() {
                 .addOnFailureListener { e-> Log.e("myTag",e.toString()) }
         }
 
-        //update playgroup
+        //update playgroup - modify here
         val playgroupButton = findViewById<Button>(R.id.playGroupButon)
         playgroupButton.setOnClickListener {
             db.collection("user").document(uid).update("playGroupList",DataContainer_User.playGroupList)
@@ -85,8 +88,6 @@ class Admin_ManageUserDetailsPage:AppCompatActivity() {
         super.onBackPressed()
         DataContainer_User.groupList.clear()
         DataContainer_User.playGroupList.clear()
-        DataContainer_User.uid =""
-        DataContainer_User.id = ""
     }
 
     override fun onStop() {
@@ -101,3 +102,4 @@ class Admin_ManageUserDetailsPage:AppCompatActivity() {
 
 
 }
+

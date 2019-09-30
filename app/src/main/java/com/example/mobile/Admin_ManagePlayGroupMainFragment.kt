@@ -24,11 +24,7 @@ class Admin_ManagePlayGroupMainFragment : Fragment() {
     val auth = FirebaseAuth.getInstance()
     lateinit var adapter: Admin_ManagePlayGroupMainFragmentAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var query = db.collection("PlayGroup").whereEqualTo("admin", "${auth.currentUser!!.uid}")
         var options = FirestoreRecyclerOptions.Builder<Object_Playgroup>()
             .setQuery(query, Object_Playgroup::class.java)
@@ -57,18 +53,22 @@ class Admin_ManagePlayGroupMainFragment : Fragment() {
             builder.setView(layout)
             builder.setPositiveButton("Add") { dialog, which ->
                 if (editText.text.isNullOrBlank()) {
-                    Toast.makeText(view!!.context, "Playgroup name cannot be empty.", Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        view!!.context,
+                        "Playgroup name cannot be empty.",
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                 } else {
                     var name = editText.text.toString()
+                    name = name.replace("\\s".toRegex(), "")
                     var id = auth.currentUser!!.uid + name
                     var array = ArrayList<String>()
                     var info = hashMapOf(
                         "admin" to "${auth.currentUser!!.uid}",
-                        "scene" to array,
+                        "user" to array,
                         "name" to name,
-                        "id" to id,
-                        "user" to array
+                        "id" to id
                     )
                     db.collection("PlayGroup").document(id).set(info)
                         .addOnFailureListener { it ->

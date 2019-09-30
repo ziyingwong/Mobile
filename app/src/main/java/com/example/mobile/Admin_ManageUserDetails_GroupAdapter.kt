@@ -25,8 +25,11 @@ class Admin_ManageUserDetails_GroupAdapter(options: FirestoreRecyclerOptions<Obj
         holder.name.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked==true){
                 DataContainer_User.groupList.add(model.id)
+                Log.e("myTag",DataContainer_User.groupList.toString())
             }else{
                 DataContainer_User.groupList.remove(model.id)
+                Log.e("myTag",DataContainer_User.groupList.toString())
+
             }
         }
     }

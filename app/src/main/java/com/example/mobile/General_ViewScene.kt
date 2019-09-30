@@ -9,11 +9,12 @@ import android.widget.ProgressBar
 
 class General_ViewScene : AppCompatActivity() {
 
-    var ipAdd = "10.0.2.2"
+    lateinit var ipAdd: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.general_webview)
+        ipAdd = resources.getString(R.string.ipAdd)
         var webView = findViewById<WebView>(R.id.webView)
         var progessBar = findViewById<ProgressBar>(R.id.progressBarWebView)
         webView.settings.javaScriptEnabled = true
@@ -25,9 +26,11 @@ class General_ViewScene : AppCompatActivity() {
 
 
             override fun onPageFinished(view: WebView, url: String) {
-                webView.loadUrl("javascript:document.querySelector(\"things-app\").shadowRoot.querySelector(\"header-bar\").remove();" +
-                        "document.querySelector(\"things-app\").shadowRoot.querySelector(\"board-viewer-page\").shadowRoot.querySelector(\"board-viewer\").shadowRoot.querySelector(\"mwc-fab\").remove();" +
-                        "document.querySelector(\"things-app\").shadowRoot.querySelector(\"footer-bar\").remove();")
+                webView.loadUrl(
+                    "javascript:document.querySelector(\"things-app\").shadowRoot.querySelector(\"header-bar\").remove();" +
+                            "document.querySelector(\"things-app\").shadowRoot.querySelector(\"board-viewer-page\").shadowRoot.querySelector(\"board-viewer\").shadowRoot.querySelector(\"mwc-fab\").remove();" +
+                            "document.querySelector(\"things-app\").shadowRoot.querySelector(\"footer-bar\").remove();"
+                )
                 progessBar.visibility = View.INVISIBLE
                 webView.visibility = View.VISIBLE
 

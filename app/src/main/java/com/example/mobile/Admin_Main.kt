@@ -29,6 +29,7 @@ class Admin_Main : AppCompatActivity() {
     lateinit var selectedFragment: Fragment
     var selectedID: Int = R.id.nav_admin_manage_user
     var haveNewSceneGroup = false
+    lateinit var ipAdd: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +39,9 @@ class Admin_Main : AppCompatActivity() {
         bottomNav.setOnNavigationItemSelectedListener(navListner)
         selectedID = intent.getIntExtra("selectedFragment", R.id.nav_admin_manage_user)
         bottomNav.selectedItemId = selectedID
+        ipAdd = resources.getString(R.string.ipAdd)
 
-        val url = "http://10.0.2.2:3000/graphql"
+        val url = "http://${ipAdd}:3000/graphql"
         val jsonObjectRequest = object : JsonObjectRequest(
             Request.Method.POST, url, null, Response.Listener { response ->
 
@@ -53,13 +55,10 @@ class Admin_Main : AppCompatActivity() {
                 var sceneGroup = ArrayList<ArrayList<String>>()
                 db.collection("scene").whereEqualTo("admin", auth.currentUser!!.uid).get()
                     .addOnSuccessListener { docs ->
-                        var i = 0
                         for (doc in docs) {
-
                             //put scene id and playgroup of the scene to arraylists
                             sceneGroup.add(doc.get("playgroup") as ArrayList<String>)
                             sceneIdfs.add(doc.get("id").toString())
-                            i++
                         }
 
                         //item = scene array ,  itemArr = scene id array
@@ -99,12 +98,6 @@ class Admin_Main : AppCompatActivity() {
                                 //id from firestore not found in thingsfactory, delete scene in firestore
                                 if (sceneIdfs.get(i) !in itemArr) {
                                     launch {
-                                        removeSceneFromPlayGroup(
-                                            sceneIdfs.get(i),
-                                            sceneGroup.get(i)
-                                        )
-                                    }
-                                    launch {
                                         removeScene(sceneIdfs.get(i))
                                     }
                                 } else {
@@ -128,8 +121,8 @@ class Admin_Main : AppCompatActivity() {
                 var token = sharedPref.getString("token", "")
                 var header = HashMap<String, String>()
                 header["Cookie"] = "access_token=${token}"
-                header["Origin"] = "http://10.0.2.2:3000"
-                header["Referer"] = "http://10.0.2.2:3000/board-list"
+                header["Origin"] = "http://${ipAdd}:3000"
+                header["Referer"] = "http://${ipAdd}:3000/board-list"
                 return header
             }
 
@@ -246,13 +239,8 @@ class Admin_Main : AppCompatActivity() {
         runBlocking {
             if (!haveNewSceneGroup) {
                 launch {
-                    haveNewSceneGroup = createNewSceneGroup(id, group)
+                    haveNewSceneGroup = createNewSceneGroup(group)
                 }
-
-//            } else {
-//                launch {
-//                    addSceneToGroup(id, group)
-//                }
             }
         }
     }
@@ -263,7 +251,7 @@ class Admin_Main : AppCompatActivity() {
         }
     }
 
-    suspend fun createNewSceneGroup(sceneId: String, groupId: String): Boolean {
+    suspend fun createNewSceneGroup(groupId: String): Boolean {
         var data = hashMapOf(
             "id" to groupId,
             "admin" to auth.currentUser!!.uid,
@@ -273,44 +261,9 @@ class Admin_Main : AppCompatActivity() {
         db.collection("Group").document(groupId).set(data, SetOptions.merge())
             .addOnSuccessListener {
                 Log.e("myTag", "created new group")
-//                runBlocking {
-//                    launch {
-//                        addSceneToGroup(sceneId, groupId)
-//                    }
-//                }
             }
         return true
     }
 
-//    suspend fun addSceneToGroup(sceneId: String, groupId: String) {
-//        db.collection("Group").document(groupId).update("scene", FieldValue.arrayUnion(sceneId))
-//            .addOnSuccessListener {
-//                Log.e("myTag", "Added scene ${sceneId} to new scene group")
-//            }
-//    }
 
-
-    suspend fun removeSceneFromPlayGroup(sceneId: String, playgroupId: ArrayList<String>) {
-        runBlocking {
-            launch {
-                for (i in playgroupId.indices) {
-                    removeSceneInPlayGroup(sceneId, playgroupId.get(i))
-                }
-            }
-        }
-    }
-
-    suspend fun removeSceneInPlayGroup(sceneId: String, playgroupId: String) {
-        db.collection("PlayGroup").document(playgroupId)
-            .update("scene", FieldValue.arrayRemove(sceneId))
-            .addOnSuccessListener {
-                Log.e(
-                    "myTag",
-                    "Removed scene ${sceneId} from group ${playgroupId}"
-                )
-            }
-            .addOnFailureListener { e ->
-                Log.e("myTag", e.toString())
-            }
-    }
 }

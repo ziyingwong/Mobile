@@ -28,7 +28,7 @@ class General_Login : AppCompatActivity() {
     var auth = FirebaseAuth.getInstance()
     var db = FirebaseFirestore.getInstance()
     var cookiemanager = CookieManager.getInstance()
-    var ipAdd = R.string.ipArr
+    lateinit var ipAdd: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +40,7 @@ class General_Login : AppCompatActivity() {
         var forgetPasswordText = findViewById<TextView>(R.id.forgetPasswordText)
         var signUpText = findViewById<TextView>(R.id.signUpText)
         var progressBar = findViewById<ProgressBar>(R.id.progressBar)
+        ipAdd = resources.getString(R.string.ipAdd)
 
 
         //login

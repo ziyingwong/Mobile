@@ -22,19 +22,29 @@
         <activity
                 android:name=".Admin_Main"
                 android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".User_Main"></activity>
+        <activity
+                android:name=".User_Main"
+                android:windowSoftInputMode="adjustPan"></activity>
+
         <activity android:name=".User_SignUp"></activity>
         <activity
                 android:name=".General_ViewScene"
                 android:screenOrientation="landscape"></activity>
-        <activity android:name=".Admin_ManageGroupDetailsPage"></activity>
-        <activity android:name=".Admin_ManageUserDetailsPage"></activity>
-        <activity android:name=".Admin_ManagePlayGroupDetailsPage"></activity>
+        <activity android:name=".Admin_ManageGroupDetailsPage"
+                android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".Admin_ManageUserDetailsPage"
+                android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".Admin_ManagePlayGroupDetailsPage"
+                android:windowSoftInputMode="adjustPan"></activity>
         <activity
                 android:name=".General_PlayScenes"
                 android:screenOrientation="landscape"></activity>
-        <activity android:name=".User_PlayGroupDetailsPage"></activity>
-        <activity android:name=".User_GroupDetailsPage"></activity>
+        <activity
+                android:name=".User_PlayGroupDetailsPage"
+                android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+                android:name=".User_GroupDetailsPage"
+                android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>

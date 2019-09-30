@@ -12,11 +12,12 @@ import androidx.appcompat.app.AppCompatActivity
 
 class General_PlayScenes : AppCompatActivity() {
 
-    var ipAdd = "10.0.2.2"
+  lateinit  var ipAdd :String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.general_webview)
+        ipAdd = resources.getString(R.string.ipAdd)
         var webView = findViewById<WebView>(R.id.webView)
         var progressBar = findViewById<ProgressBar>(R.id.progressBarWebView)
         webView.settings.javaScriptEnabled = true

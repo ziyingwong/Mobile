@@ -1,6 +1,7 @@
 package com.example.mobile
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ class Admin_ManageGroupDetails_Adapter(options: FirestoreRecyclerOptions<Object_
         holder.itemView.setOnClickListener { view ->
             val intent = Intent(view.context, General_ViewScene::class.java)
             intent.putExtra("id",model.id)
+            Log.e("myTag",model.name +":"+ model.id)
             intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
             view.context.startActivity(intent)
         }

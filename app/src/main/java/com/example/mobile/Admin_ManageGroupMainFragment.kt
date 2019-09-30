@@ -52,11 +52,12 @@ class Admin_ManageGroupMainFragment : Fragment() {
                         .show()
                 } else {
                     var name = editText.text.toString()
+                    name = name.replace("\\s".toRegex(), "")
                     var id  = auth.currentUser!!.uid+name
                     var array = ArrayList<String>()
                     var info = hashMapOf(
                         "admin" to "${auth.currentUser!!.uid}",
-                        "scene" to array,
+                        "user" to array,
                         "name" to name,
                         "id" to id
                     )
