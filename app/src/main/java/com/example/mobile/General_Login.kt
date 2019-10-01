@@ -106,6 +106,15 @@ class General_Login : AppCompatActivity() {
                                         },
                                         Response.ErrorListener { error ->
                                             Log.e("myTag", "Error : ${error}")
+                                            var builder = AlertDialog.Builder(this)
+                                            builder.setTitle("Fail to login")
+                                            builder.setMessage("Server is off. Please try again later")
+                                            builder.setNeutralButton("Ok") { dialog, which ->
+                                                auth.signOut()
+                                                finishAffinity()
+                                                startActivity(Intent(this, General_Login::class.java))
+                                            }
+                                            builder.show()
                                         }
                                     )
                                     Singleton_Volley.getInstance(this@General_Login)
