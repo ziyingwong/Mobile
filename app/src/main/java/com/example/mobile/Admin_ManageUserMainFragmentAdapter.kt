@@ -46,9 +46,8 @@ class Admin_ManageUserMainFragmentAdapter(options: FirestoreRecyclerOptions<Obje
                         var group = doc.documents.get(i).get("id").toString()
                         grouplist.add(group)
                     }
-                    DataContainer_User.groupList = grouplist
-                    DataContainer_User.OldGroupList = grouplist
-                    Log.e("myTag", grouplist.toString())
+                    DataContainer_User.OldGroupList=grouplist.clone() as ArrayList<String>
+                    DataContainer_User.groupList =grouplist
                     db.collection("PlayGroup").whereEqualTo("admin", auth.currentUser!!.uid)
                         .whereArrayContains("user", model.uid).get()
                         .addOnSuccessListener { doc ->
@@ -57,10 +56,8 @@ class Admin_ManageUserMainFragmentAdapter(options: FirestoreRecyclerOptions<Obje
                                 playgrouplist.add(group)
                             }
                             DataContainer_User.playGroupList = playgrouplist
-                            DataContainer_User.OldPlayGroupList = playgrouplist
-                            Log.e("myTag", playgrouplist.toString())
-                            val intent =
-                                Intent(view.context, Admin_ManageUserDetailsPage::class.java)
+                            DataContainer_User.OldPlayGroupList = playgrouplist.clone() as ArrayList<String>
+                            val intent = Intent(view.context, Admin_ManageUserDetailsPage::class.java)
                             intent.putExtra("id", model.id)
                             intent.putExtra("uid", model.uid)
                             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)

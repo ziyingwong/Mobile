@@ -23,12 +23,13 @@ class Admin_ManageUserDetails_PlayGroupAdapter(options: FirestoreRecyclerOptions
             holder.name.isChecked = true
         }
         holder.name.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked == true) {
+            if (isChecked == true && model.id !in DataContainer_User.playGroupList) {
                 DataContainer_User.playGroupList.add(model.id)
                 Log.e("myTag",DataContainer_User.playGroupList.toString())
-            } else {
+            } else if(isChecked ==false && model.id in DataContainer_User.playGroupList) {
                 DataContainer_User.playGroupList.remove(model.id)
                 Log.e("myTag",DataContainer_User.playGroupList.toString())
+
             }
         }
 
