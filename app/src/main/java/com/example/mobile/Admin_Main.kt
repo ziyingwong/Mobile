@@ -49,7 +49,6 @@ class Admin_Main : AppCompatActivity() {
                 Log.e("myTag", "${response}")
                 val myresponse = Klaxon().parse<Object_VolleyResponse>(response.toString())
                 Log.e("myTag", "things factory total : ${myresponse?.data?.boards?.total}")
-
                 //get all scene stored in firebase
                 var sceneIdfs = ArrayList<String>()
                 var sceneGroup = ArrayList<ArrayList<String>>()
@@ -71,11 +70,10 @@ class Admin_Main : AppCompatActivity() {
 
                             //check if all scene in thingsfactory is stored in firestore
                             for (k in item.indices) {
-
                                 //id from things factory not found in firestore, add to scene to firestore
                                 if (item.get(k).id !in sceneIdfs) {
                                     launch {
-                                        addScene(item.get(k).id, item.get(k).name)
+                                        addScene(item.get(k).id, item.get(k).name,item.get(k).thumbnail)
                                     }
                                 } else {
                                     launch {
@@ -128,7 +126,7 @@ class Admin_Main : AppCompatActivity() {
 
             override fun getBody(): ByteArray {
                 var string: String =
-                    "{\"query\":\"{\\n  boards(sortings: [{name: \\\"createdAt\\\", desc: true}]) {\\n    items {\\n      id\\n      name\\n        }\\n    total\\n    }\\n}\\n\"}"
+                    "{\"query\":\"{\\n  boards(sortings: [{name: \\\"createdAt\\\", desc: true}]) {\\n    items {\\n      id\\n      name\\n        thumbnail\\n        }\\n    total\\n    }\\n}\\n\"}"
                 var body: ByteArray = string.toByteArray()
                 return body
             }
@@ -219,7 +217,7 @@ class Admin_Main : AppCompatActivity() {
         finishAffinity()
     }
 
-    suspend fun addScene(id: String, name: String) {
+    suspend fun addScene(id: String, name: String,thumbnail :String) {
         Log.e("myTag", "Adding scene : ${id}")
         var group = auth.currentUser!!.uid + "newscene"
         var data = hashMapOf(
@@ -227,7 +225,8 @@ class Admin_Main : AppCompatActivity() {
             "id" to id,
             "admin" to auth.currentUser!!.uid,
             "group" to group,
-            "playgroup" to ArrayList<String>()
+            "playgroup" to ArrayList<String>(),
+            "thumbnail" to thumbnail
         )
         db.collection("scene").document(id).set(data).addOnCompleteListener { task ->
             if (task.isSuccessful) {

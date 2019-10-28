@@ -16,5 +16,6 @@ class Object_Board {
 class Object_Items {
     lateinit var id: String
     lateinit var name: String
+    lateinit var thumbnail : String
 }
 

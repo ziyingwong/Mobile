@@ -5,6 +5,6 @@
         <item>Company X</item>
         <item>Company Z</item>
     </string-array>
-    <string name="ipAdd">10.215.72.104</string>
- <!--   <string name="ipAdd">10.0.2.2</string>-->
+<!--    <string name="ipAdd">10.215.72.104</string>-->
+    <string name="ipAdd">10.0.2.2</string>
 </resources>
