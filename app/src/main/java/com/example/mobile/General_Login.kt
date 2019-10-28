@@ -240,6 +240,7 @@ class General_Login : AppCompatActivity() {
         var signUpClickableSpan = object : ClickableSpan() {
             override fun onClick(p0: View) {
                 val intent = Intent(this@General_Login, User_SignUp::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
                 startActivity(intent)
             }
 

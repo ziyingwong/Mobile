@@ -27,15 +27,19 @@
                 android:name=".User_Main"
                 android:windowSoftInputMode="adjustPan"></activity>
 
-        <activity android:name=".User_SignUp"></activity>
+        <activity android:name=".User_SignUp"
+                android:windowSoftInputMode="adjustPan"></activity>
         <activity
                 android:name=".General_ViewScene"
                 android:screenOrientation="landscape"></activity>
-        <activity android:name=".Admin_ManageGroupDetailsPage"
+        <activity
+                android:name=".Admin_ManageGroupDetailsPage"
                 android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".Admin_ManageUserDetailsPage"
+        <activity
+                android:name=".Admin_ManageUserDetailsPage"
                 android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".Admin_ManagePlayGroupDetailsPage"
+        <activity
+                android:name=".Admin_ManagePlayGroupDetailsPage"
                 android:windowSoftInputMode="adjustPan"></activity>
         <activity
                 android:name=".General_PlayScenes"
@@ -46,6 +50,8 @@
         <activity
                 android:name=".User_GroupDetailsPage"
                 android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+                android:name=".User_SignUp_Details"></activity>
     </application>
 
 </manifest>
