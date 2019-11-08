@@ -72,6 +72,7 @@ class User_Main : AppCompatActivity() {
                 builder.setMessage("Are you sure you want to log out?")
                 builder.setPositiveButton("Yes") { dialog, which ->
                     FirebaseAuth.getInstance().signOut()
+                    this.getSharedPreferences("pref",0).edit().clear().apply()
                     val intent = Intent(this, General_Login::class.java)
                     finishAffinity()
                     startActivity(intent)
