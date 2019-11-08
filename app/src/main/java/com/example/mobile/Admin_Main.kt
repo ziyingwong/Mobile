@@ -47,9 +47,9 @@ class Admin_Main : AppCompatActivity() {
             Request.Method.POST, url, null, Response.Listener { response ->
 
                 //get all scene stored in things factory and convert to volley response object
-                Log.e("myTag", "${response}")
+
                 val myresponse = Klaxon().parse<Object_VolleyResponse>(response.toString())
-                Log.e("myTag", "things factory total : ${myresponse?.data?.boards?.total}")
+
                 //get all scene stored in firebase
                 var sceneIdfs = ArrayList<String>()
                 var sceneGroup = ArrayList<ArrayList<String>>()
@@ -66,7 +66,6 @@ class Admin_Main : AppCompatActivity() {
                         var itemArr = ArrayList<String>()
                         Log.e("myTag", "firestore :${sceneIdfs.size}")
                         Log.e("myTag", "things factory : ${item.size}")
-
                         runBlocking {
 
                             //check if all scene in thingsfactory is stored in firestore
@@ -74,7 +73,11 @@ class Admin_Main : AppCompatActivity() {
                                 //id from things factory not found in firestore, add to scene to firestore
                                 if (item.get(k).id !in sceneIdfs) {
                                     launch {
-                                        addScene(item.get(k).id, item.get(k).name,item.get(k).thumbnail)
+                                        addScene(
+                                            item.get(k).id,
+                                            item.get(k).name,
+                                            item.get(k).thumbnail
+                                        )
                                     }
                                 } else {
                                     launch {
@@ -219,7 +222,7 @@ class Admin_Main : AppCompatActivity() {
         finishAffinity()
     }
 
-    suspend fun addScene(id: String, name: String,thumbnail :String) {
+    suspend fun addScene(id: String, name: String, thumbnail: String) {
         Log.e("myTag", "Adding scene : ${id}")
         var group = auth.currentUser!!.uid + "newscene"
         var data = hashMapOf(
@@ -265,6 +268,5 @@ class Admin_Main : AppCompatActivity() {
             }
         return true
     }
-
 
 }

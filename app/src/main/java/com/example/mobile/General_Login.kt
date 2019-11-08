@@ -277,6 +277,7 @@ class General_Login : AppCompatActivity() {
             var token = sharedPref.getString("token", "")
             if (token.isNullOrBlank()) {
                 auth.signOut()
+                Log.e("myTag","sorry no token")
                 finishAffinity()
                 startActivity(Intent(this, General_Login::class.java))
             } else {
