@@ -58,10 +58,20 @@
                 <!--android:src="@drawable/cast"/>-->
     <!--</LinearLayout>-->
 
+    <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+    </WebView>
+
     <RelativeLayout
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/controlPanel"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
             android:background="#EAEDED"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -99,7 +109,7 @@
                 android:layout_marginHorizontal="25dp"
                 android:layout_marginVertical="15dp"
                 android:layout_width="wrap_content"
-                android:layout_toRightOf="@+id/scene_pause"
+                android:layout_toRightOf="@id/scene_pause"
                 android:layout_height="wrap_content"
                 android:src="@drawable/next"/>
 
@@ -112,17 +122,6 @@
                 android:layout_marginVertical="15dp"
                 android:src="@drawable/cast"/>
     </RelativeLayout>
-
-    <WebView
-            android:id="@+id/webView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-    </WebView>
 
     <ProgressBar
             android:id="@+id/progressBarWebView"
