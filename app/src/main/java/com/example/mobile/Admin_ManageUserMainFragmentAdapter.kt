@@ -1,5 +1,8 @@
 package com.example.mobile
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -46,8 +49,8 @@ class Admin_ManageUserMainFragmentAdapter(options: FirestoreRecyclerOptions<Obje
                         var group = doc.documents.get(i).get("id").toString()
                         grouplist.add(group)
                     }
-                    DataContainer_User.OldGroupList=grouplist.clone() as ArrayList<String>
-                    DataContainer_User.groupList =grouplist
+                    DataContainer_User.OldGroupList = grouplist.clone() as ArrayList<String>
+                    DataContainer_User.groupList = grouplist
                     db.collection("PlayGroup").whereEqualTo("admin", auth.currentUser!!.uid)
                         .whereArrayContains("user", model.uid).get()
                         .addOnSuccessListener { doc ->
@@ -73,6 +76,22 @@ class Admin_ManageUserMainFragmentAdapter(options: FirestoreRecyclerOptions<Obje
         }
     }
 
+//    fun deleteItem(position: Int, context: Context, model: Object_User) {
+//        val alertDialog = AlertDialog.Builder(context)
+//        alertDialog.setTitle("Delete")
+//        alertDialog.setMessage("Are you sure you want to delete User ${snapshots.getSnapshot(position).get("name")} ?")
+//        alertDialog.setNegativeButton("Cancel") { dialog, which ->
+//            dialog.dismiss()
+//            this.notifyDataSetChanged()
+//        }
+//        alertDialog.setPositiveButton("Yes", object : DialogInterface.OnClickListener {
+//            override fun onClick(p0: DialogInterface?, p1: Int) {
+////                snapshots.getSnapshot(position).reference.delete()
+//                //do server to delete
+//            }
+//        })
+//        alertDialog.show()
+//    }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var id = itemView.findViewById<TextView>(R.id.dataA)

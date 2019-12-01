@@ -1,6 +1,8 @@
 package com.example.mobile
 
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -8,6 +10,7 @@ import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.view.WindowManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.*
@@ -15,6 +18,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GestureDetectorCompat
 import android.widget.NumberPicker
+import com.google.android.gms.appindexing.Action
+import com.google.android.gms.appindexing.AppIndex
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.appindexing.Action.TYPE_VIEW
 
 
 class General_PlayScenes : AppCompatActivity() {
@@ -24,8 +31,15 @@ class General_PlayScenes : AppCompatActivity() {
     lateinit var countDown: CountDownTimer
     var counter = DataContainer_Other.timeInterval.toLong()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (Build.VERSION.SDK_INT < 16) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }else{
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.general_playscene)
         ipAdd = resources.getString(R.string.ipAdd)
@@ -33,6 +47,7 @@ class General_PlayScenes : AppCompatActivity() {
         var progressBar = findViewById<ProgressBar>(R.id.progressBarWebView)
         var list = intent.getStringArrayListExtra("list")
         var selected = intent.getIntExtra("selected", 0)
+
         var url = "http://${ipAdd}:3000/board-viewer/"
         var controlPanel = findViewById<RelativeLayout>(R.id.controlPanel)
         var timer = findViewById<ImageView>(R.id.scene_timer)
@@ -43,6 +58,9 @@ class General_PlayScenes : AppCompatActivity() {
         var isRunning = false
         webView.visibility = View.INVISIBLE
         progressBar.visibility = View.VISIBLE
+        cast.setOnClickListener {
+            startActivity(Intent("android.settings.CAST_SETTINGS"))
+        }
 
         //set timer
         countDown = object : CountDownTimer(counter, 1000) {
@@ -159,6 +177,13 @@ class General_PlayScenes : AppCompatActivity() {
             builder.show()
         }
 
+        webView.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                return mDetector.onTouchEvent(event)
+            }
+
+        })
+
         mDetector = GestureDetectorCompat(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onDoubleTap(e: MotionEvent?): Boolean {
                 if (controlPanel.visibility == View.INVISIBLE) {
@@ -177,18 +202,7 @@ class General_PlayScenes : AppCompatActivity() {
                 }
                 return true
             }
-
-
         })
-
-        webView.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                return mDetector.onTouchEvent(event)
-            }
-
-        })
-
-
         //webView setting
         webView.settings.javaScriptEnabled = true
         webView.setWebViewClient(object : WebViewClient() {
@@ -216,6 +230,12 @@ class General_PlayScenes : AppCompatActivity() {
         webView.loadUrl(url + list.get(selected))
         countDown.start()
 
+    }
+
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        countDown.cancel()
     }
 
 }

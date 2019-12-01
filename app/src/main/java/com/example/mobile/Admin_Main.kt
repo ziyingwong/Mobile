@@ -29,7 +29,6 @@ class Admin_Main : AppCompatActivity() {
     var auth = FirebaseAuth.getInstance()
     lateinit var selectedFragment: Fragment
     var selectedID: Int = R.id.nav_admin_manage_user
-    var haveNewSceneGroup = false
     lateinit var ipAdd: String
 
 
@@ -81,9 +80,10 @@ class Admin_Main : AppCompatActivity() {
                                     }
                                 } else {
                                     launch {
-                                        Log.e(
-                                            "myTag",
-                                            "${k + 1} scene ${item.get(k).id} exist in firestore"
+                                        updateScene(
+                                            item.get(k).id,
+                                            item.get(k).name,
+                                            item.get(k).thumbnail
                                         )
                                     }
                                 }
@@ -188,7 +188,7 @@ class Admin_Main : AppCompatActivity() {
                 builder.setMessage("Are you sure you want to log out?")
                 builder.setPositiveButton("Yes") { dialog, which ->
                     FirebaseAuth.getInstance().signOut()
-                    this.getSharedPreferences("pref",0).edit().clear().apply()
+                    this.getSharedPreferences("pref", 0).edit().clear().apply()
                     val intent = Intent(this, General_Login::class.java)
                     finishAffinity()
                     startActivity(intent)
@@ -226,6 +226,7 @@ class Admin_Main : AppCompatActivity() {
         Log.e("myTag", "Adding scene : ${id}")
         var group = auth.currentUser!!.uid + "newscene"
         var data = hashMapOf(
+            "lowercasename" to name.replace("\\s".toRegex(), "").toLowerCase(),
             "name" to name,
             "id" to id,
             "admin" to auth.currentUser!!.uid,
@@ -240,11 +241,21 @@ class Admin_Main : AppCompatActivity() {
                 Log.e("myTag", "Fail to add scene : ${id}")
             }
         }
-        runBlocking {
-            if (!haveNewSceneGroup) {
-                launch {
-                    haveNewSceneGroup = createNewSceneGroup(group)
-                }
+
+    }
+
+    suspend fun updateScene(id: String, name: String, thumbnail: String) {
+        Log.e("myTag", "Updating scene : ${id}")
+        var data = hashMapOf(
+            "lowercasename" to name.replace("\\s".toRegex(), "").toLowerCase(),
+            "name" to name,
+            "thumbnail" to thumbnail
+        )
+        db.collection("scene").document(id).set(data, SetOptions.merge()).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Log.e("myTag", "Updated scene :${id}")
+            } else {
+                Log.e("myTag", "Fail to add scene : ${id}")
             }
         }
     }
@@ -253,20 +264,6 @@ class Admin_Main : AppCompatActivity() {
         db.collection("scene").document(id).delete().addOnSuccessListener {
             Log.e("myTag", "deleted scene ${id}")
         }
-    }
-
-    suspend fun createNewSceneGroup(groupId: String): Boolean {
-        var data = hashMapOf(
-            "id" to groupId,
-            "admin" to auth.currentUser!!.uid,
-            "name" to "New Scene"
-        )
-
-        db.collection("Group").document(groupId).set(data, SetOptions.merge())
-            .addOnSuccessListener {
-                Log.e("myTag", "created new group")
-            }
-        return true
     }
 
 }

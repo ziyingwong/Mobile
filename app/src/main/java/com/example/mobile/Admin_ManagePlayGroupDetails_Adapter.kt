@@ -1,5 +1,8 @@
 package com.example.mobile
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
 class Admin_ManagePlayGroupDetails_Adapter(
@@ -49,6 +53,41 @@ class Admin_ManagePlayGroupDetails_Adapter(
                 }
 
         }
+    }
+
+    fun deleteItem(context: Context, position: Int) {
+        var alertDialog = AlertDialog.Builder(context)
+        alertDialog.setTitle("Delete")
+        alertDialog.setMessage("Are you sure you want to delete scene ${snapshots.getSnapshot(position).get("name")} ?")
+        alertDialog.setNegativeButton("Cancel") { dialog, which ->
+            dialog.dismiss()
+            this.notifyDataSetChanged()
+        }
+        alertDialog.setPositiveButton("Yes", object : DialogInterface.OnClickListener {
+
+            override fun onClick(p0: DialogInterface?, p1: Int) {
+                //modified
+
+
+                db.collection("scene").document(snapshots.getSnapshot(position).id)
+                    .update("playgroup", FieldValue.arrayRemove(id))
+                    .addOnSuccessListener {
+                        if (snapshots.size < 1) {
+                            db.collection("PlayGroup").document(id).update("imageUrl", "")
+
+                        } else {
+                            db.collection("PlayGroup").document(id)
+                                .update("imageUrl", snapshots.getSnapshot(0).get("thumbnail"))
+                        }
+                        Log.e("mytag", "removed")
+
+                    }
+                    .addOnFailureListener { E ->
+                        Log.e("mytag", "$E")
+                    }
+            }
+        })
+        alertDialog.show()
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

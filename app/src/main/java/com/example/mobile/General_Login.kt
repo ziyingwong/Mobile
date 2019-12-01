@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.AsyncTask
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.SpannableString
@@ -14,6 +15,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.webkit.CookieManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -74,9 +76,10 @@ class General_Login : AppCompatActivity() {
                             var UID = auth.currentUser!!.uid
                             db.collection("user").document(UID).get()
                                 .addOnSuccessListener { document ->
-
                                     //API call to login to ThingsFactory
-                                    val url = "http://${ipAdd}:300/login/"
+
+                                    var admin = document.get("admin")
+                                    val url = "http://${ipAdd}:300/$admin/login/"
                                     val jsonObjectRequest = JsonObjectRequest(
                                         Request.Method.GET,
                                         url,
@@ -277,7 +280,7 @@ class General_Login : AppCompatActivity() {
             var token = sharedPref.getString("token", "")
             if (token.isNullOrBlank()) {
                 auth.signOut()
-                Log.e("myTag","sorry no token")
+                Log.e("myTag", "sorry no token")
                 finishAffinity()
                 startActivity(Intent(this, General_Login::class.java))
             } else {

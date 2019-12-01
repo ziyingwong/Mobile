@@ -5,58 +5,6 @@
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
                                                    android:orientation="horizontal">
-    <!--<LinearLayout-->
-            <!--android:id="@+id/linearLayout5"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginStart="8dp"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:layout_marginBottom="8dp"-->
-            <!--android:orientation="horizontal"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--app:layout_constraintStart_toStartOf="parent">-->
-        <!--<Space-->
-                <!--android:layout_width="20dp"-->
-                <!--android:layout_height="match_parent"/>-->
-        <!--<ImageView-->
-                <!--android:id="@+id/scene_timer"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:src="@drawable/timer"/>-->
-        <!--<Space-->
-                <!--android:layout_width="170dp"-->
-                <!--android:layout_height="match_parent"/>-->
-        <!--<ImageView-->
-                <!--android:id="@+id/scene_previous"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:src="@drawable/previous"-->
-        <!--/>-->
-        <!--<Space-->
-                <!--android:layout_width="50dp"-->
-                <!--android:layout_height="match_parent"/>-->
-        <!--<ImageView-->
-                <!--android:id="@+id/scene_pause"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:src="@drawable/pause"/>-->
-        <!--<Space-->
-                <!--android:layout_width="50dp"-->
-                <!--android:layout_height="match_parent"/>-->
-        <!--<ImageView-->
-                <!--android:id="@+id/scene_next"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:src="@drawable/next"/>-->
-        <!--<Space-->
-                <!--android:layout_width="170dp"-->
-                <!--android:layout_height="match_parent"/>-->
-        <!--<ImageView-->
-                <!--android:id="@+id/scene_cast"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:src="@drawable/cast"/>-->
-    <!--</LinearLayout>-->
 
     <WebView
             android:id="@+id/webView"

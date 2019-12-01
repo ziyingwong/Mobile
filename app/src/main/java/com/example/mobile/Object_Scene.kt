@@ -6,5 +6,6 @@ class Object_Scene {
     lateinit var id:String
     lateinit var name :String
     lateinit var playgroup:ArrayList<String>
+    lateinit var thumbnail:String
 
 }

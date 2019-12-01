@@ -23,12 +23,6 @@
                     android:text="data_A"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
-            <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:gravity="left"
-                    app:srcCompat="@drawable/delete_icon" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
