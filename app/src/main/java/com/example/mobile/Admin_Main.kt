@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.IntegerRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -14,11 +15,13 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.beust.klaxon.Klaxon
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -31,10 +34,30 @@ class Admin_Main : AppCompatActivity() {
     var selectedID: Int = R.id.nav_admin_manage_user
     lateinit var ipAdd: String
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_main)
+
+        //token
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("mytoken", "getInstanceId failed", task.exception)
+                    return@OnCompleteListener
+                }
+                // Get new Instance ID token
+                val token = task.result?.token
+                // Log and toast
+                Log.e("mynoti", token)
+                val msg = getString(R.string.msg_token_fmt, token)
+                db.collection("user").document(auth.currentUser!!.uid).update("token",FieldValue.arrayUnion(token)).addOnSuccessListener {
+                    Log.e("mynoti", "updated token")
+                }.addOnFailureListener { e ->
+                    Log.e("mynoti", e.toString())
+                }
+                Log.d("mytoken", msg)
+            })
+
         bottomNav = findViewById(R.id.admin_bottom_navigation)
         bottomNav.setOnNavigationItemSelectedListener(navListner)
         selectedID = intent.getIntExtra("selectedFragment", R.id.nav_admin_manage_user)

@@ -40,39 +40,43 @@ class Admin_ManageUserMainFragmentAdapter(options: FirestoreRecyclerOptions<Obje
     override fun onBindViewHolder(holder: ViewHolder, position: Int, model: Object_User) {
         holder.id.text = model.id
         holder.itemView.setOnClickListener { view ->
+            val intent = Intent(view.context, Admin_ManageUserDetail::class.java)
+            intent.putExtra("id", model.id)
+            intent.putExtra("uid", model.uid)
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            view.context.startActivity(intent)
 
-
-            db.collection("Group").whereEqualTo("admin", auth.currentUser!!.uid)
-                .whereArrayContains("user", model.uid).get()
-                .addOnSuccessListener { doc ->
-                    for (i in doc.documents.indices) {
-                        var group = doc.documents.get(i).get("id").toString()
-                        grouplist.add(group)
-                    }
-                    DataContainer_User.OldGroupList = grouplist.clone() as ArrayList<String>
-                    DataContainer_User.groupList = grouplist
-                    db.collection("PlayGroup").whereEqualTo("admin", auth.currentUser!!.uid)
-                        .whereArrayContains("user", model.uid).get()
-                        .addOnSuccessListener { doc ->
-                            for (i in doc.documents.indices) {
-                                var group = doc.documents.get(i).get("id").toString()
-                                playgrouplist.add(group)
-                            }
-                            DataContainer_User.playGroupList = playgrouplist
-                            DataContainer_User.OldPlayGroupList = playgrouplist.clone() as ArrayList<String>
-                            val intent = Intent(view.context, Admin_ManageUserDetailsPage::class.java)
-                            intent.putExtra("id", model.id)
-                            intent.putExtra("uid", model.uid)
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                            view.context.startActivity(intent)
-                        }
-                        .addOnFailureListener { e ->
-                            Log.e("myTag", e.toString())
-                        }
-                }
-                .addOnFailureListener { e ->
-                    Log.e("myTag", e.toString())
-                }
+//            db.collection("Group").whereEqualTo("admin", auth.currentUser!!.uid)
+//                .whereArrayContains("user", model.uid).get()
+//                .addOnSuccessListener { doc ->
+//                    for (i in doc.documents.indices) {
+//                        var group = doc.documents.get(i).get("id").toString()
+//                        grouplist.add(group)
+//                    }
+//                    DataContainer_User.OldGroupList = grouplist.clone() as ArrayList<String>
+//                    DataContainer_User.groupList = grouplist
+//                    db.collection("PlayGroup").whereEqualTo("admin", auth.currentUser!!.uid)
+//                        .whereArrayContains("user", model.uid).get()
+//                        .addOnSuccessListener { doc ->
+//                            for (i in doc.documents.indices) {
+//                                var group = doc.documents.get(i).get("id").toString()
+//                                playgrouplist.add(group)
+//                            }
+//                            DataContainer_User.playGroupList = playgrouplist
+//                            DataContainer_User.OldPlayGroupList = playgrouplist.clone() as ArrayList<String>
+//                            val intent = Intent(view.context, Admin_ManageUserDetailsPage::class.java)
+//                            intent.putExtra("id", model.id)
+//                            intent.putExtra("uid", model.uid)
+//                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+//                            view.context.startActivity(intent)
+//                        }
+//                        .addOnFailureListener { e ->
+//                            Log.e("myTag", e.toString())
+//                        }
+//                }
+//                .addOnFailureListener { e ->
+//                    Log.e("myTag", e.toString())
+//                }
         }
     }
 
