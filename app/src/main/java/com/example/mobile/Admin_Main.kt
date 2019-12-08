@@ -208,7 +208,7 @@ class Admin_Main : AppCompatActivity() {
             R.id.nav_admin_logout -> {
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Logout")
-                builder.setMessage("Are you sure you want to log out?")
+                builder.setMessage("Are you sure you want to logout?")
                 builder.setPositiveButton("Yes") { dialog, which ->
                     FirebaseAuth.getInstance().signOut()
                     this.getSharedPreferences("pref", 0).edit().clear().apply()

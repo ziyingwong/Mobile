@@ -124,7 +124,7 @@ class Admin_ManageUserDetail : AppCompatActivity() {
                             loadRecyclerView("Group")
                         }
                         1 -> {
-                            addButton.text = "Add Play Group"
+                            addButton.text = "Add Playgroup"
                             loadRecyclerView("PlayGroup")
                         }
                         2 -> {
