@@ -38,7 +38,9 @@ class General_ViewScene : AppCompatActivity() {
         var progessBar = findViewById<ProgressBar>(R.id.progressBarWebView)
         webView.settings.javaScriptEnabled = true
         var id = intent.getStringExtra("id")
-        var url = "http://${ipAdd}:3000/board-viewer/${id}"
+//        var url = "http://${ipAdd}:3000/board-viewer/${id}"
+        var url = "https://board.opa-x.com/domain/demo/board-viewer/${id}"
+
         webView.visibility = View.INVISIBLE
         progessBar.visibility = View.VISIBLE
         var cast = findViewById<ImageView>(R.id.scene_cast)
@@ -80,8 +82,9 @@ class General_ViewScene : AppCompatActivity() {
             override fun onPageFinished(view: WebView, url: String) {
                 webView.loadUrl(
                     "javascript:document.querySelector(\"things-app\").shadowRoot.querySelector(\"header-bar\").remove();" +
-                            "document.querySelector(\"things-app\").shadowRoot.querySelector(\"board-viewer-page\").shadowRoot.querySelector(\"board-viewer\").shadowRoot.querySelector(\"mwc-fab\").remove();" +
-                            "document.querySelector(\"things-app\").shadowRoot.querySelector(\"footer-bar\").remove();"
+                            "document.querySelector(\"things-app\").shadowRoot.querySelector(\"main\").querySelector(\"app-board-viewer-page\").shadowRoot.querySelector(\"board-viewer\").shadowRoot.querySelector(\"mwc-fab\").remove();" +
+                            "document.querySelector(\"things-app\").shadowRoot.querySelector(\"footer-bar\").remove();"+
+                            "document.querySelector(\"things-app\").shadowRoot.querySelector(\"snack-bar\").remove();"
                 )
                 progessBar.visibility = View.INVISIBLE
                 webView.visibility = View.VISIBLE
@@ -92,7 +95,6 @@ class General_ViewScene : AppCompatActivity() {
         })
         webView.loadUrl(url)
     }
-
 
 }
 

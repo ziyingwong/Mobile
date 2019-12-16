@@ -50,11 +50,12 @@ class Admin_Main : AppCompatActivity() {
                 // Log and toast
                 Log.e("mynoti", token)
                 val msg = getString(R.string.msg_token_fmt, token)
-                db.collection("user").document(auth.currentUser!!.uid).update("token",FieldValue.arrayUnion(token)).addOnSuccessListener {
-                    Log.e("mynoti", "updated token")
-                }.addOnFailureListener { e ->
-                    Log.e("mynoti", e.toString())
-                }
+                db.collection("user").document(auth.currentUser!!.uid)
+                    .update("token", FieldValue.arrayUnion(token)).addOnSuccessListener {
+                        Log.e("mynoti", "updated token")
+                    }.addOnFailureListener { e ->
+                        Log.e("mynoti", e.toString())
+                    }
                 Log.d("mytoken", msg)
             })
 
@@ -64,7 +65,9 @@ class Admin_Main : AppCompatActivity() {
         bottomNav.selectedItemId = selectedID
         ipAdd = resources.getString(R.string.ipAdd)
 
-        val url = "http://${ipAdd}:3000/graphql"
+//        val url = "http://${ipAdd}:3000/graphql"
+        val url = "https://board.opa-x.com/graphql"
+
         val jsonObjectRequest = object : JsonObjectRequest(
             Request.Method.POST, url, null, Response.Listener { response ->
 
@@ -146,8 +149,11 @@ class Admin_Main : AppCompatActivity() {
                 var token = sharedPref.getString("token", "")
                 var header = HashMap<String, String>()
                 header["Cookie"] = "access_token=${token}"
-                header["Origin"] = "http://${ipAdd}:3000"
-                header["Referer"] = "http://${ipAdd}:3000/board-list"
+                header["Origin"] = "https://board.opa-x.com"
+                header["Referer"] = "https://board.opa-x.com/domain/demo/board-list"
+
+//                header["Origin"] = "http://${ipAdd}:3000"
+//                header["Referer"] = "http://${ipAdd}:3000/board-list"
                 return header
             }
 
@@ -274,13 +280,14 @@ class Admin_Main : AppCompatActivity() {
             "name" to name,
             "thumbnail" to thumbnail
         )
-        db.collection("scene").document(id).set(data, SetOptions.merge()).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Log.e("myTag", "Updated scene :${id}")
-            } else {
-                Log.e("myTag", "Fail to add scene : ${id}")
+        db.collection("scene").document(id).set(data, SetOptions.merge())
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.e("myTag", "Updated scene :${id}")
+                } else {
+                    Log.e("myTag", "Fail to add scene : ${id}")
+                }
             }
-        }
     }
 
     suspend fun removeScene(id: String) {

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">SuperWiser</string>
-    <!--    <string name="ipAdd">10.215.72.104</string>-->
-        <!--<string name="ipAdd">10.0.2.2</string>-->
-    <string name="ipAdd">192.168.0.112</string>
+<!--    <string name="ipAdd">172.20.10.11</string>-->
+    <!--<string name="ipAdd">10.0.2.2</string>-->
+        <string name="ipAdd">192.168.0.112</string>
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 

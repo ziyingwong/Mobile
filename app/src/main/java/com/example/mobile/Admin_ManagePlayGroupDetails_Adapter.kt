@@ -47,7 +47,7 @@ class Admin_ManagePlayGroupDetails_Adapter(
                     intent.putExtra("selected", position)
                     intent.putExtra("list", scenes)
                     Log.e("myTag", "${id} : ${scenes}")
-                    intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+//                    intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
                     view.context.startActivity(intent)
 
                 }

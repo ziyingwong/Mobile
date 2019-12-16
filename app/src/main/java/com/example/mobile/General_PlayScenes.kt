@@ -37,7 +37,7 @@ class General_PlayScenes : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
-        }else{
+        } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         }
         super.onCreate(savedInstanceState)
@@ -48,7 +48,8 @@ class General_PlayScenes : AppCompatActivity() {
         var list = intent.getStringArrayListExtra("list")
         var selected = intent.getIntExtra("selected", 0)
 
-        var url = "http://${ipAdd}:3000/board-viewer/"
+        var url = "https://board.opa-x.com/domain/demo/board-viewer/"
+//        var url = "http://${ipAdd}:3000/board-viewer/"
         var controlPanel = findViewById<RelativeLayout>(R.id.controlPanel)
         var timer = findViewById<ImageView>(R.id.scene_timer)
         var previous = findViewById<ImageView>(R.id.scene_previous)
@@ -69,7 +70,7 @@ class General_PlayScenes : AppCompatActivity() {
                 val intent = Intent(this@General_PlayScenes, General_PlayScenes::class.java)
                 intent.putExtra("list", list)
                 intent.putExtra("selected", selected + 1)
-                intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }
 
@@ -91,7 +92,7 @@ class General_PlayScenes : AppCompatActivity() {
             val intent = Intent(this@General_PlayScenes, General_PlayScenes::class.java)
             intent.putExtra("list", list)
             intent.putExtra("selected", selected - 1)
-            intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         }
 
@@ -108,7 +109,8 @@ class General_PlayScenes : AppCompatActivity() {
                         val intent = Intent(this@General_PlayScenes, General_PlayScenes::class.java)
                         intent.putExtra("list", list)
                         intent.putExtra("selected", selected + 1)
-                        intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
                     }
 
@@ -210,7 +212,7 @@ class General_PlayScenes : AppCompatActivity() {
 
                 view.loadUrl(
                     "javascript:document.querySelector(\"things-app\").shadowRoot.querySelector(\"header-bar\").remove();" +
-                            "document.querySelector(\"things-app\").shadowRoot.querySelector(\"board-viewer-page\").shadowRoot.querySelector(\"board-viewer\").shadowRoot.querySelector(\"mwc-fab\").remove();" +
+                            "document.querySelector(\"things-app\").shadowRoot.querySelector(\"main\").querySelector(\"app-board-viewer-page\").shadowRoot.querySelector(\"board-viewer\").shadowRoot.querySelector(\"mwc-fab\").remove();" +
                             "document.querySelector(\"things-app\").shadowRoot.querySelector(\"footer-bar\").remove();"
                 )
                 progressBar.visibility = View.INVISIBLE

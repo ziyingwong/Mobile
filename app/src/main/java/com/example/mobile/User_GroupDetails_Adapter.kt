@@ -21,7 +21,6 @@ class User_GroupDetails_Adapter(options: FirestoreRecyclerOptions<Object_Scene>)
         holder.itemView.setOnClickListener { view ->
             val intent = Intent(view.context, General_ViewScene::class.java)
             intent.putExtra("id",model.id)
-            intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
             view.context.startActivity(intent)
         }
     }

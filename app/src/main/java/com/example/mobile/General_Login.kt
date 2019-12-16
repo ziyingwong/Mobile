@@ -93,7 +93,8 @@ class General_Login : AppCompatActivity() {
                                             editor.putString("token", token)
                                             editor.apply()
                                             cookiemanager.setCookie(
-                                                "http://${ipAdd}:3000",
+//                                                "http://${ipAdd}:3000",
+                                                "https://board.opa-x.com",
                                                 "access_token=${token}"
                                             )
 
@@ -115,7 +116,12 @@ class General_Login : AppCompatActivity() {
                                             builder.setNeutralButton("Ok") { dialog, which ->
                                                 auth.signOut()
                                                 finishAffinity()
-                                                startActivity(Intent(this, General_Login::class.java))
+                                                startActivity(
+                                                    Intent(
+                                                        this,
+                                                        General_Login::class.java
+                                                    )
+                                                )
                                             }
                                             builder.show()
                                         }
@@ -285,7 +291,8 @@ class General_Login : AppCompatActivity() {
                 startActivity(Intent(this, General_Login::class.java))
             } else {
                 cookiemanager.setCookie(
-                    "http://${ipAdd}:3000",
+//                    "http://${ipAdd}:3000",
+                    "https://board.opa-x.com",
                     "access_token=${token}"
                 )
                 Log.e("myTag", "token : ${token}")

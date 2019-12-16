@@ -36,7 +36,6 @@ class Admin_ManageGroupDetails_Adapter(options: FirestoreRecyclerOptions<Object_
             val intent = Intent(view.context, General_ViewScene::class.java)
             intent.putExtra("id", model.id)
             Log.e("myTag", model.name + ":" + model.id)
-            intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
             view.context.startActivity(intent)
         }
     }

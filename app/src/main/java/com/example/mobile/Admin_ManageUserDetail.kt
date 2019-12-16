@@ -204,7 +204,7 @@ class Admin_ManageUserDetail : AppCompatActivity() {
                 Log.e("mytag", "add group")
                 addGroup()
             }
-            "Add Play Group" -> {
+            "Add Playgroup" -> {
                 Log.e("mytag", "add playgroup")
                 addPlayGroup()
 
