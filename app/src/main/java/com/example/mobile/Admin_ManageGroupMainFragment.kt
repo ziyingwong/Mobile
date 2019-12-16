@@ -103,8 +103,9 @@ class Admin_ManageGroupMainFragment : Fragment() {
                         .show()
                 } else {
                     var name = editText.text.toString()
+
                     var lowercasename = name.replace("\\s".toRegex(), "").toLowerCase()
-                    var id = auth.currentUser!!.uid + name
+                    var id = auth.currentUser!!.uid +  name.replace("\\s".toRegex(), "")
                     var array = ArrayList<String>()
                     array.add(auth.currentUser!!.uid)
                     var info = hashMapOf(
