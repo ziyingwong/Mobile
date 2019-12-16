@@ -213,7 +213,9 @@ class General_PlayScenes : AppCompatActivity() {
                 view.loadUrl(
                     "javascript:document.querySelector(\"things-app\").shadowRoot.querySelector(\"header-bar\").remove();" +
                             "document.querySelector(\"things-app\").shadowRoot.querySelector(\"main\").querySelector(\"app-board-viewer-page\").shadowRoot.querySelector(\"board-viewer\").shadowRoot.querySelector(\"mwc-fab\").remove();" +
-                            "document.querySelector(\"things-app\").shadowRoot.querySelector(\"footer-bar\").remove();"
+                            "document.querySelector(\"things-app\").shadowRoot.querySelector(\"footer-bar\").remove();" +
+                            "document.querySelector(\"things-app\").shadowRoot.querySelector(\"snack-bar\").remove();"
+
                 )
                 progressBar.visibility = View.INVISIBLE
                 webView.visibility = View.VISIBLE
